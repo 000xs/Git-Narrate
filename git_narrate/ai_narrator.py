@@ -1,8 +1,11 @@
 import json
+import os
 from typing import Dict, Any, List
 from datetime import datetime
 import requests
 from .utils import format_date
+from dotenv import load_dotenv
+load_dotenv()
 
 
 class AINarrator:
@@ -10,7 +13,7 @@ class AINarrator:
         self.repo_data = repo_data
         # This placeholder will be replaced by the actual API key during the GitHub Actions build process.
         # WARNING: The API key will be embedded in the distributed package.
-        self.api_key = "__OPENAI_API_KEY_PLACEHOLDER__" 
+        self.api_key = "__OPENAI_API_KEY_PLACEHOLDER__"  or os.getenv("OPENAI_API_KEY" )
 
     def generate_story(self) -> str:
         """Generate an AI-powered narrative of the repository's development."""
