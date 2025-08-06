@@ -14,15 +14,16 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.x'
-      - name : export api key to validate
-        run: echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> $GITHUB_ENV
-      - name : Exports api key to env
-        run: export OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}"
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install build twine
-       
+      - name: Build
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          export OPENAI_API_KEY
+          python -m build
       - name: Publish package
         env:
           TWINE_USERNAME: __token__
