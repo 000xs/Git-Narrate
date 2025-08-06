@@ -3,11 +3,11 @@ from pathlib import Path
 
 # Read README for long description
 this_directory = Path(__file__).parent
-long_description = (this_directory / "README.md").read_text(encoding='utf-8')
+long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="git-narrate",
-    version="0.1.4",
+    version="0.1.5",
     description="The Repository Storyteller - Analyze git repos and generate development narratives",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -40,8 +40,11 @@ setup(
         "nltk>=3.6.0",
         "matplotlib>=3.5.0",
         "plotly>=5.0.0",
-        "rich>=12.0.0",  # For enhanced CLI output
-        "python-dateutil>=2.8.0",  # Date parsing
+        "rich>=12.0.0",
+        "python-dateutil>=2.8.0",
+        "openai>=1.0.0",
+        "requests>=2.28.0",
+        "python-dotenv>=0.19.0",
     ],
     extras_require={
         "dev": [

@@ -20,17 +20,6 @@ class RepoAnalyzer:
             "readme_content": self._get_readme_content()
         }
     
-    def _get_readme_content(self) -> str:
-        """Read the content of README.md if it exists."""
-        readme_path = self.repo_path / "README.md"
-        if readme_path.exists():
-            try:
-                with open(readme_path, "r", encoding="utf-8") as f:
-                    return f.read()
-            except Exception:
-                return "" # Return empty string if there's an error reading
-        return "" # Return empty string if README.md does not exist
-
     def _get_commits(self) -> List[Dict[str, Any]]:
         """Extract commit history."""
         commits = []
@@ -92,3 +81,24 @@ class RepoAnalyzer:
                 contributors[author]["last_commit"] = commit["date"]
         
         return dict(contributors)
+    
+    def _get_readme_content(self) -> str:
+        """Extract content from README file if it exists."""
+        readme_paths = [
+            self.repo_path / "README.md",
+            self.repo_path / "README.rst",
+            self.repo_path / "README.txt",
+            self.repo_path / "readme.md",
+            self.repo_path / "readme.rst",
+            self.repo_path / "readme.txt"
+        ]
+        
+        for path in readme_paths:
+            if path.exists() and path.is_file():
+                try:
+                    with open(path, 'r', encoding='utf-8') as f:
+                        return f.read()
+                except Exception:
+                    continue
+        
+        return ""

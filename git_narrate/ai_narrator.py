@@ -5,28 +5,35 @@ from datetime import datetime
 import requests
 from .utils import format_date
 from dotenv import load_dotenv
-load_dotenv()
-
 
 class AINarrator:
     def __init__(self, repo_data: Dict[str, Any]):
         self.repo_data = repo_data
- 
-        self.api_key = os.getenv("OPENAI_API_KEY" )
-
+        
+        # Load environment variables from .env file if it exists
+        load_dotenv()
+        
+        # Get API key from environment
+        self.api_key = os.getenv("OPENAI_API_KEY")
+        
+        # Validate API key
+        if not self.api_key or self.api_key.strip() == "":
+            self.api_key = None
+    
     def generate_story(self) -> str:
         """Generate an AI-powered narrative of the repository's development."""
+        # Check if API key is available
+        if not self.api_key:
+            return self._generate_fallback_story()
+        
         # Prepare data for AI
         story_data = self._prepare_story_data()
-
+        
         # Create prompt for AI
         prompt = self._create_prompt(story_data)
-
+        
         # Generate story with AI
         try:
-            if self.api_key == "__OPENAI_API_KEY_PLACEHOLDER__":
-                return "Error: API key not embedded in the package. Please ensure the package was built with the API key injected."
-
             headers = {
                 "Content-Type": "application/json",
                 "Accept-Language": "en-US,en",
@@ -56,7 +63,43 @@ class AINarrator:
             return f"Error generating AI story: {str(e)}"
         except KeyError:
             return "Error: Unexpected response format from AI API."
-
+    
+    def _generate_fallback_story(self) -> str:
+        """Generate a fallback story when API key is not available."""
+        story_data = self._prepare_story_data()
+        
+        # Create a basic story without AI
+        story = f"# The Story of {story_data['project_name']}\n\n"
+        story += f"{story_data['project_name']} is a {story_data['setting']} that began its journey on "
+        
+        if story_data["timeline"]:
+            first_event = story_data["timeline"][0]
+            story += f"{format_date(first_event['date'])} with an initial commit by {first_event['description'].split('when ')[-1].split(' made the')[0]}."
+        else:
+            story += "an unknown date."
+        
+        story += "\n\n## Development Journey\n\n"
+        
+        # Add timeline events
+        if story_data["timeline"]:
+            for event in story_data["timeline"]:
+                story += f"### {event['event']}\n"
+                story += f"{event['description']}\n\n"
+        
+        # Add contributors
+        if story_data["characters"]:
+            story += "## Key Contributors\n\n"
+            for char in story_data["characters"]:
+                story += f"### {char['name']}\n"
+                story += f"{char['name']} served as a {char['role']} and was a {char['impact'].lower()} on the project. "
+                story += f"They made {char['contributions']} contributions from {char['first_appearance']} to {char['last_appearance']}.\n\n"
+        
+        story += "## Note\n\n"
+        story += "This story was generated without AI assistance due to missing API key configuration. "
+        story += "For more detailed storytelling, please set the OPENAI_API_KEY environment variable.\n"
+        
+        return story
+    
     def _prepare_story_data(self) -> Dict[str, Any]:
         """Prepare repository data for AI storytelling."""
         # Extract key story elements
@@ -69,7 +112,7 @@ class AINarrator:
             "setting": self._get_project_context(),
             "readme_content": self.repo_data.get("readme_content", "")
         }
-
+        
         # Create timeline of major events
         if self.repo_data["commits"]:
             first_commit = min(self.repo_data["commits"], key=lambda c: c["date"])
@@ -81,7 +124,7 @@ class AINarrator:
                     "significance": "beginning",
                 }
             )
-
+        
         # Add releases as major plot points
         for tag in self.repo_data["tags"]:
             if tag.get("date"):
@@ -93,7 +136,7 @@ class AINarrator:
                         "significance": "milestone",
                     }
                 )
-
+        
         # Add major merges as turning points
         for commit in self.repo_data["commits"]:
             if commit["is_merge"] and any(
@@ -108,10 +151,10 @@ class AINarrator:
                         "significance": "turning_point",
                     }
                 )
-
+        
         # Sort timeline by date
         story_data["timeline"] = sorted(story_data["timeline"], key=lambda x: x["date"])
-
+        
         # Create character profiles for contributors
         for author, stats in self.repo_data["contributors"].items():
             role = self._infer_contributor_role(stats)
@@ -125,12 +168,12 @@ class AINarrator:
                     "impact": self._describe_impact(stats),
                 }
             )
-
+        
         # Extract plot points from commit messages
         story_data["plot_points"] = self._extract_plot_points()
-
+        
         return story_data
-
+    
     def _get_project_description_from_readme(self) -> str:
         """Extract a concise project description from README.md content."""
         readme = self.repo_data.get("readme_content", "")
@@ -156,12 +199,12 @@ class AINarrator:
                 break
         
         return " ".join(description_lines).strip() or "A software project."
-
+    
     def _get_project_context(self) -> str:
         """Infer project context from repository data, prioritizing README content."""
         readme = self.repo_data.get("readme_content", "").lower()
         commit_messages = [c["message"].lower() for c in self.repo_data["commits"]]
-
+        
         # Prioritize README for context
         if "web application" in readme or "api" in readme or "server" in readme:
             return "web application"
@@ -183,13 +226,13 @@ class AINarrator:
             return "game development"
         else:
             return "software project"
-
+    
     def _infer_contributor_role(self, stats: Dict[str, Any]) -> str:
         """Infer the role of a contributor based on their activity."""
         commits = stats["commits"]
         insertions = stats["insertions"]
         deletions = stats["deletions"]
-
+        
         if commits > 50:
             return "Lead Developer"
         elif commits > 20:
@@ -200,7 +243,7 @@ class AINarrator:
             return "Code Refiner"
         else:
             return "Contributor"
-
+    
     def _describe_impact(self, stats: Dict[str, Any]) -> str:
         """Describe the impact of a contributor."""
         commits = stats["commits"]
@@ -208,7 +251,7 @@ class AINarrator:
             c["commits"] for c in self.repo_data["contributors"].values()
         )
         percentage = (commits / total_commits) * 100
-
+        
         if percentage > 40:
             return "Architect of the project"
         elif percentage > 20:
@@ -217,14 +260,14 @@ class AINarrator:
             return "Significant contributor"
         else:
             return "Valued team member"
-
+    
     def _extract_plot_points(self) -> List[Dict[str, Any]]:
         """Extract plot points from commit messages."""
         plot_points = []
-
+        
         for commit in self.repo_data["commits"]:
             msg = commit["message"].lower()
-
+            
             # Look for significant events
             if any(keyword in msg for keyword in ["initial", "begin", "start"]):
                 plot_points.append(
@@ -258,70 +301,54 @@ class AINarrator:
                         "date": commit["date"],
                     }
                 )
-
+        
         return plot_points[:10]  # Limit to top 10 plot points
-
+    
     def _create_prompt(self, story_data: Dict[str, Any]) -> str:
         """Create a detailed prompt for the AI storyteller, incorporating README content."""
         project_name = story_data['project_name']
         project_description = story_data['project_description']
         setting = story_data['setting']
         readme_content = story_data['readme_content']
-
+        
         prompt = f"""
         Generate a professional and accurate development story for the project "{project_name}", which is a {setting}.
-
         Project Overview: {project_description}
-
         ---
-
         **Story Structure:**
-
         1.  **Introduction:**
             *   Briefly introduce the project and its initial purpose.
             *   Mention the project's inception and early contributions.
-
         2.  **Development Phases:**
             *   Describe the key development periods, highlighting major features implemented, significant architectural changes, and refactoring efforts.
             *   Detail how challenges (e.g., bugs, technical hurdles) were addressed.
             *   Integrate major merges and releases as significant milestones, explaining their impact on the project's evolution.
-
         3.  **Contributors and Their Impact:**
             *   Introduce the main contributors and their roles.
             *   Summarize their key contributions and overall impact on the project.
-
         4.  **Conclusion:**
             *   Summarize the project's journey and its current state.
             *   Reflect on its growth and the collective effort involved.
-
         ---
-
         **Key Data to Incorporate:**
-
         **TIMELINE OF MAJOR EVENTS:**
         {self._format_timeline(story_data['timeline'])}
-
         **MAIN CONTRIBUTORS:**
         {self._format_characters(story_data['characters'])}
-
         **KEY DEVELOPMENT POINTS (from commit messages):**
         {self._format_plot_points(story_data['plot_points'])}
-
         **ADDITIONAL PROJECT CONTEXT (from README.md - use this for factual details about the project's purpose, features, and setup):**
         {readme_content if readme_content else "No README content available."}
-
         ---
-
         **Narrative Style:**
         *   **Tone:** Professional, factual, and informative.
         *   **Language:** Clear, concise, and direct. Avoid overly dramatic or fictionalized language.
         *   **Focus:** Emphasize the technical journey, problem-solving, and project evolution.
         *   **Word Count:** Aim for 500-800 words.
-
         Begin the development story of "{project_name}".
         """
         return prompt
-
+    
     def _format_timeline(self, timeline: List[Dict[str, Any]]) -> str:
         """Format timeline for the prompt."""
         return "\n".join(
@@ -330,7 +357,7 @@ class AINarrator:
                 for event in timeline
             ]
         )
-
+    
     def _format_characters(self, characters: List[Dict[str, Any]]) -> str:
         """Format character descriptions for the prompt."""
         return "\n".join(
@@ -341,7 +368,7 @@ class AINarrator:
                 for char in characters
             ]
         )
-
+    
     def _format_plot_points(self, plot_points: List[Dict[str, Any]]) -> str:
         """Format plot points for the prompt."""
         return "\n".join(
