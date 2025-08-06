@@ -19,12 +19,14 @@ jobs:
         pip install build twine
     - name: Inject API Key and Build
       run: |
-        python -c "import sys; import os; \
-        file_path = 'git_narrate/ai_narrator.py'; \
-        with open(file_path, 'r') as f: content = f.read(); \
-        content = content.replace('__OPENAI_API_KEY_PLACEHOLDER__', os.environ.get('OPENAI_API_KEY', '')); \
-        with open(file_path, 'w') as f: f.write(content); \
-        print('API Key injected into ' + file_path)"
+        echo "import os" > inject_api_key.py
+        echo "file_path = 'git_narrate/ai_narrator.py'" >> inject_api_key.py
+        echo "with open(file_path, 'r') as f: content = f.read()" >> inject_api_key.py
+        echo "content = content.replace('__OPENAI_API_KEY_PLACEHOLDER__', os.environ.get('OPENAI_API_KEY', ''))" >> inject_api_key.py
+        echo "with open(file_path, 'w') as f: f.write(content)" >> inject_api_key.py
+        echo "print('API Key injected into ' + file_path)" >> inject_api_key.py
+        
+        python inject_api_key.py
         python -m build
       env:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
