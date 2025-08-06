@@ -7,16 +7,16 @@ long_description = (this_directory / "README.md").read_text(encoding='utf-8')
 
 setup(
     name="git-narrate",
-    version="0.1.0",
+    version="0.1.1",
     description="The Repository Storyteller - Analyze git repos and generate development narratives",
     long_description=long_description,
     long_description_content_type="text/markdown",
     author="Git-Narrate Team",
-    author_email="contact@git-narrate.dev",
-    url="https://github.com/git-narrate/git-narrate",
+    author_email="SITHUMSS9122@gmail.com",
+    url="https://github.com/000xs/git-narrate",
     project_urls={
-        "Bug Tracker": "https://github.com/git-narrate/git-narrate/issues",
-        "Documentation": "https://github.com/git-narrate/git-narrate/wiki",
+        "Bug Tracker": "https://github.com/000xs/git-narrate/issues",
+        "Documentation": "https://github.com/000xs/git-narrate/wiki",
     },
     license="MIT",
     classifiers=[

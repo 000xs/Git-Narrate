@@ -31,6 +31,7 @@ Once installed, you can run Git-Narrate on any of your projects that use `git`.
 2.  **Run the command:**
     Now, simply run the `git-narrate` command, telling it to look at the current folder (`.`):
     ```bash
+t
     git-narrate .
     ```
 
