@@ -60,9 +60,9 @@ This will create two image files:
 *   `timeline.png`: A chart showing how many changes were made over time.
 *   `contributors.png`: A chart showing who made the most changes.
 
-### Use AI to Write a Better Story
+## AI-Powered Storytelling (Now Default!)
 
-You can use the power of Artificial Intelligence to write a more detailed and engaging story.
+Git-Narrate now uses Artificial Intelligence by default to create detailed and engaging stories about your project's journey. To make this work, you'll need to set up an API key:
 
 1.  **Get an API Key:**
     This feature uses the Z.ai platform. You'll need to get an API key from them.
@@ -74,12 +74,7 @@ You can use the power of Artificial Intelligence to write a more detailed and en
         OPENAI_API_KEY="your_api_key_here"
         ```
 
-3.  **Run with the `--use-ai` flag:**
-    ```bash
-    git-narrate . --use-ai
-    ```
-
-Now, Git-Narrate will use AI to write a more creative story about your project's journey.
+Now, Git-Narrate will automatically use AI to write a more creative story about your project's journey.
 
 ## For Developers: A Quick Look Under the Hood
 
@@ -87,7 +82,7 @@ If you're a developer and want to contribute to Git-Narrate, here's a quick over
 
 *   **`analyzer.py`**: This is the heart of the tool. It uses `GitPython` to read the `.git` folder and extract all the data about commits, branches, tags, and contributors.
 *   **`narrator.py`**: This module takes the data from the analyzer and turns it into a story. It has different functions to create Markdown, HTML, or plain text stories.
-*   **`ai_narrator.py`**: When you use the `--use-ai` flag, this module takes over. It sends the project data to the Z.ai API and gets back a more detailed story.
+*   **`ai_narrator.py`**: This module sends the project data to the Z.ai API and gets back a more detailed story.
 *   **`visualizer.py`**: This module uses `matplotlib` to create the timeline and contributor charts.
 *   **`cli.py`**: This file defines the command-line interface using `click`, so you can run `git-narrate` with different options.
 

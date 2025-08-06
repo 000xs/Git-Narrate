@@ -4,7 +4,7 @@ import re
 from .ai_narrator import AINarrator
 
 class RepoNarrator:
-    def __init__(self, repo_data: Dict[str, Any], use_ai: bool = False):
+    def __init__(self, repo_data: Dict[str, Any], use_ai: bool = True):
         self.repo_data = repo_data
         self.use_ai = use_ai
         if not use_ai:

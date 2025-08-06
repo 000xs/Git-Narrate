@@ -12,11 +12,10 @@ from .visualizer import RepoVisualizer
               default="markdown", help="Output format")
 @click.option("--visualize", "-v", is_flag=True, help="Generate visualization charts")
 @click.option("--no-narrative", is_flag=True, help="Skip narrative generation (visualize only)")
-@click.option("--use-ai", is_flag=True, help="Use AI model for story generation (requires OPENAI_API_KEY)")
-@click.option("--ai-model", default="gpt-4-turbo", help="AI model to use (default: gpt-4-turbo)")
-def main(repo_path, output, output_format, visualize, no_narrative, use_ai, ai_model):
+@click.option("--ai-model", default="glm-4.5-flash", help="AI model to use (default: gpt-4-turbo)")
+def main(repo_path, output, output_format, visualize, no_narrative, ai_model):
     """Generate a human-readable story of a git repository's development."""
-    repo_path = Path(repo_path)
+    repo_path = Path(repo_path) #get repo path
     
     if output:
         output_path = Path(output)
@@ -30,13 +29,10 @@ def main(repo_path, output, output_format, visualize, no_narrative, use_ai, ai_m
     
     # Generate narrative
     if not no_narrative:
-        if use_ai:
-            click.echo("Generating AI-powered narrative...")
-            click.echo(f"Using model: {ai_model}")
-        else:
-            click.echo("Generating narrative...")
+        click.echo("Generating AI-powered narrative...")
+        click.echo(f"Using model: {ai_model}")
         
-        narrator = RepoNarrator(repo_data, use_ai=use_ai)
+        narrator = RepoNarrator(repo_data, use_ai=True)
         story = narrator.generate_story(output_format)
         
         # Save narrative
