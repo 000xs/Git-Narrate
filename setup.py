@@ -1,0 +1,64 @@
+from setuptools import setup, find_packages
+from pathlib import Path
+
+# Read README for long description
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text(encoding='utf-8')
+
+setup(
+    name="git-narrate",
+    version="0.1.0",
+    description="The Repository Storyteller - Analyze git repos and generate development narratives",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    author="Git-Narrate Team",
+    author_email="contact@git-narrate.dev",
+    url="https://github.com/git-narrate/git-narrate",
+    project_urls={
+        "Bug Tracker": "https://github.com/git-narrate/git-narrate/issues",
+        "Documentation": "https://github.com/git-narrate/git-narrate/wiki",
+    },
+    license="MIT",
+    classifiers=[
+        "Development Status :: 4 - Beta",
+        "Intended Audience :: Developers",
+        "Topic :: Software Development :: Version Control :: Git",
+        "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Operating System :: OS Independent",
+    ],
+    keywords="git version-control repository-analysis storytelling visualization",
+    packages=find_packages(exclude=["tests", "tests.*"]),
+    python_requires=">=3.8",
+    install_requires=[
+        "click>=8.0.0",
+        "gitpython>=3.1.0",
+        "nltk>=3.6.0",
+        "matplotlib>=3.5.0",
+        "plotly>=5.0.0",
+        "rich>=12.0.0",  # For enhanced CLI output
+        "python-dateutil>=2.8.0",  # Date parsing
+    ],
+    extras_require={
+        "dev": [
+            "pytest>=7.0.0",
+            "pytest-cov>=4.0.0",
+            "black>=22.0.0",
+            "flake8>=5.0.0",
+            "mypy>=0.991",
+            "pre-commit>=2.20.0",
+        ],
+        "viz": ["kaleido>=0.2.1"],  # For static image export
+    },
+    entry_points={
+        "console_scripts": [
+            "git-narrate=git_narrate.cli:main",
+        ],
+    },
+    include_package_data=True,
+    zip_safe=False,
+)
