@@ -11,9 +11,8 @@ load_dotenv()
 class AINarrator:
     def __init__(self, repo_data: Dict[str, Any]):
         self.repo_data = repo_data
-        # This placeholder will be replaced by the actual API key during the GitHub Actions build process.
-        # WARNING: The API key will be embedded in the distributed package.
-        self.api_key = "__OPENAI_API_KEY_PLACEHOLDER__"  or os.getenv("OPENAI_API_KEY" )
+ 
+        self.api_key = os.getenv("OPENAI_API_KEY" )
 
     def generate_story(self) -> str:
         """Generate an AI-powered narrative of the repository's development."""
