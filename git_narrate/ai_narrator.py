@@ -1,17 +1,16 @@
-import os
 import json
 from typing import Dict, Any, List
 from datetime import datetime
-import requests # Added requests
+import requests
 from .utils import format_date
-from dotenv import load_dotenv # Added dotenv
-
-load_dotenv()
 
 
 class AINarrator:
     def __init__(self, repo_data: Dict[str, Any]):
         self.repo_data = repo_data
+        # This placeholder will be replaced by the actual API key during the GitHub Actions build process.
+        # WARNING: The API key will be embedded in the distributed package.
+        self.api_key = "__OPENAI_API_KEY_PLACEHOLDER__" 
 
     def generate_story(self) -> str:
         """Generate an AI-powered narrative of the repository's development."""
@@ -23,14 +22,13 @@ class AINarrator:
 
         # Generate story with AI
         try:
-            api_key = os.getenv("OPENAI_API_KEY") # Using OPENAI_API_KEY for now as per original code
-            if not api_key:
-                return "Error: OPENAI_API_KEY environment variable not set."
+            if self.api_key == "__OPENAI_API_KEY_PLACEHOLDER__":
+                return "Error: API key not embedded in the package. Please ensure the package was built with the API key injected."
 
             headers = {
                 "Content-Type": "application/json",
                 "Accept-Language": "en-US,en",
-                "Authorization": f"Bearer {api_key}",
+                "Authorization": f"Bearer {self.api_key}",
             }
             payload = {
                 "model": "glm-4.5-flash",

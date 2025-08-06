@@ -25,6 +25,8 @@ jobs:
         pip install -r requirements.txt
         pip install pytest black flake8 mypy # Install tools for testing and linting
     - name: Run tests
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }} # Pass API key for AI-related tests
       run: pytest
     - name: Run linting and type checks
       run: |

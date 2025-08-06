@@ -17,8 +17,12 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install build twine
-    - name: Build distribution
-      run: python -m build
+    - name: Inject API Key and Build
+      run: |
+        sed -i "s|__OPENAI_API_KEY_PLACEHOLDER__|${{ secrets.OPENAI_API_KEY }}|g" git_narrate/ai_narrator.py
+        python -m build
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
     - name: Publish package
       env:
         TWINE_USERNAME: __token__
