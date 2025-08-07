@@ -51,35 +51,28 @@
                     <h1>Development Story: Git-Narrate</h1>
 <h2>Introduction</h2>
 <p>
-Git-Narrate was conceived as an innovative tool to transform raw git repository data into engaging narratives about a project's development journey. The project was officially born on August 6, 2025, when Sithum Sathsara initiated the first commit, establishing both the foundation and vision for this unique application. From its inception, Git-Narrate was designed to serve developers by analyzing git history and generating comprehensive stories of how projects evolved over time.
+Git-Narrate was born on August 6, 2025, when Sithum Sathsara initiated the project with its first commit. Conceived as a unique tool that transforms git history into a readable narrative, Git-Narrate aims to help developers visualize and understand the evolution of their projects through an automated storytelling process. The project was designed to bridge the gap between technical version control data and human-readable documentation, providing insights into the development journey that might otherwise be buried in commit logs.
 </p>
 <h2>Development Phases</h2>
 <p>
-The initial development phase focused on establishing the core functionality and architecture of Git-Narrate. A significant early feature implemented was the AI token integration, which enables the application to leverage artificial intelligence for enhanced narrative generation. This feature represents the project's commitment to combining traditional git analysis with modern AI capabilities.
+In its initial development phase, Git-Narrate established a robust architecture consisting of several key modules. The foundation was built around `analyzer.py`, which leverages GitPython to parse git repositories and extract meaningful data about commits, branches, tags, and contributors. This data is then processed by `narrator.py`, which transforms the raw information into structured narratives in multiple formats including Markdown, HTML, and plain text.
 </p>
 <p>
-The architecture was thoughtfully designed with several key components working in harmony:
+A significant early milestone was the integration of AI-powered narration through `ai_narrator.py`, which interfaces with the Z.ai API to generate more sophisticated and detailed stories about project evolution. This feature enhances the tool's ability to provide context-rich narratives beyond what automated analysis can achieve.
 </p>
-<ul>
-<li>`analyzer.py`: The central module responsible for parsing git repositories and extracting relevant data using GitPython</li>
-<li>`narrator.py`: Transforms the analyzed data into coherent narratives across multiple formats</li>
-<li>`ai_narrator.py`: Integrates with the Z.ai API to generate more sophisticated and detailed stories</li>
-<li>`visualizer.py`: Creates visual representations of development timelines and contributor activity</li>
-<li>`cli.py`: Provides a user-friendly command-line interface using the Click framework</li>
-</ul>
 <p>
-This modular approach ensures maintainability and extensibility, allowing for future enhancements while preserving the core functionality.
+The implementation of visualization capabilities through `visualizer.py` added another dimension to the project, enabling users to generate graphical representations of their development timeline and contributor activity. The CLI interface, defined in `cli.py` using the Click library, provides a user-friendly command-line experience with various output options.
+</p>
+<p>
+An important feature added during this phase was the AI token integration, which enables the AI narration functionality by securely managing authentication with the external AI service.
 </p>
 <h2>Contributors and Their Impact</h2>
 <p>
-Sithum Sathsara has been the driving force behind Git-Narrate, serving as both the primary developer and architect. With 14 contributions to date, Sathsara has shaped the project's technical direction and implemented its fundamental features. His initial vision for transforming git history into compelling narratives has guided the project's development, establishing a solid foundation that supports both Markdown and HTML output formats, as well as visual analytics capabilities.
+Sithum Sathsara serves as the project's architect and primary contributor, establishing the foundational architecture and implementing core functionality. With 15 contributions in the initial phase, Sathsara demonstrated a clear vision for the project and executed it with technical precision. As the sole contributor during this early stage, Sathsara's work encompassed the entire development stack, from backend analysis to CLI interface design, ensuring all components worked harmoniously to deliver a cohesive user experience.
 </p>
 <h2>Conclusion</h2>
 <p>
-Git-Narrate has established itself as a valuable tool for developers seeking to understand and communicate their project's evolution. Though still in its early stages, the project demonstrates a clear technical direction and user-friendly approach. The integration of AI capabilities with traditional git analysis positions it uniquely in the developer tool landscape. As the project continues to evolve, it holds promise for becoming an essential resource for project documentation, retrospectives, and knowledge sharing within development teams.
-</p>
-<p>
-The collective effort, primarily guided by Sathsara's vision and implementation, has resulted in a functional and potentially transformative tool that bridges the gap between technical version control and human-readable storytelling.
+Git-Narrate's journey began with a promising start on August 6, 2025, establishing itself as a specialized tool for converting technical git history into human-readable narratives. The project has laid a solid foundation with its modular architecture, AI integration, and visualization capabilities. While still in its early stages, Git-Narrate shows potential to become a valuable asset for development teams seeking to understand and document their project evolution. The collective effort, though currently concentrated in one contributor, has produced a well-structured application with clear pathways for future expansion and community involvement.
 </p>
                 </div>
             </body>

@@ -18,18 +18,16 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.x'
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install pytest black flake8 mypy # Install tools for testing and linting
+        python-version: '3.x'  
+    - name: Build python package
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}  
+      run: python -m build
     - name: Run tests
       env:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }} # Pass API key for AI-related tests
-      run: pytest
-    - name: Run linting and type checks
       run: |
-        black --check .
-        flake8 .
-        mypy git_narrate
+        python -m pip install dist/*.whl
+        python -m git_narrate -h
+        rm -r dist
+

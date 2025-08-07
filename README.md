@@ -6,6 +6,14 @@ Welcome to Git-Narrate! This guide will help you get started with turning your p
 
 Imagine your project is like a movie, and every change you make is a scene. Git-Narrate is like a movie director that watches all these scenes and creates a story about how your project was made. It looks at your project's `git` history (the log of all your changes) and writes a narrative about it.
 
+## Key Features
+
+*   **Comprehensive Repository Analysis**: Git-Narrate delves into your Git repository to extract detailed information about commits, branches, tags, and contributors.
+*   **AI-Powered Storytelling**: Leverage the power of AI to transform raw Git data into a rich, engaging, and accurate narrative of your project's development journey.
+*   **Flexible Output Formats**: Generate your project's story in Markdown, HTML, or plain text, suitable for various uses like documentation, web display, or simple readability.
+*   **Visual Insights**: Create insightful visualizations, including a commit activity timeline and a contributor activity chart, to better understand your project's evolution and team contributions.
+*   **Interactive Command-Line Interface**: A user-friendly CLI guides you through the process with clear prompts for repository path, output preferences, and visualization options.
+
 ## Getting Started
 
 ### 1. Installation
@@ -29,36 +37,24 @@ Once installed, you can run Git-Narrate on any of your projects that use `git`.
     ```
 
 2.  **Run the command:**
-    Now, simply run the `git-narrate` command, telling it to look at the current folder (`.`):
+    Now, simply run the `git-narrate` command:
     ```bash
-    git-narrate .
+    git-narrate 
     ```
+    The application will then guide you through the process by asking for the following inputs:
+    *   **Path to your Git repository**: You can enter the path to your repository (e.g., `/path/to/your/project`) or simply press Enter to use the current directory (`.`).
+    *   **Output format**: Choose between Markdown, HTML, or plain text for your story.
+    *   **Output file path**: Specify where you want to save the generated story file.
+    *   **Generate visualization charts**: Confirm if you want to create `timeline.png` and `contributors.png` charts.
 
-This will create a new file in your project folder called `git_story.md`. This file contains the story of your project's development!
+    After you provide these inputs, Git-Narrate will generate the story and any requested visualizations.
 
 ## Fun Things You Can Do
 
-### Create an HTML Story
+Git-Narrate will prompt you for your preferences, allowing you to:
 
-If you want a story that looks like a webpage, you can tell Git-Narrate to create an HTML file.
-
-```bash
-git-narrate . --output=my_story.html --format=html
-```
-
-This will create a file named `my_story.html` that you can open in your web browser.
-
-### Create Visualizations
-
-Git-Narrate can also create cool charts to show you who has contributed to your project and when most of the work was done.
-
-```bash
-git-narrate . --visualize
-```
-
-This will create two image files:
-*   `timeline.png`: A chart showing how many changes were made over time.
-*   `contributors.png`: A chart showing who made the most changes.
+*   **Choose Output Format**: Select `html` to generate a story that looks like a webpage (e.g., `git_story.html`).
+*   **Generate Visualizations**: Opt to create `timeline.png` (commit activity over time) and `contributors.png` (contributor activity) charts.
 
  
 ## For Developers: A Quick Look Under the Hood
