@@ -32,17 +32,16 @@ def main():
     ).ask()
 
     output_extension = "md" if output_format == "markdown" else "html" if output_format == "html" else "txt" if output_format == "text" else "txt"
-    output_default = repo_path / f"git_story"
-    output_str = console.input(
-        f"[bold cyan]Enter output file path(/path/[filename])[/bold cyan] [default: {output_default}]: "
-    ) or str(output_default)
+    output_default = repo_path / "git_story"
+    output_str = questionary.text(
+        f"Enter output file path(/path/[filename])",
+        default=str(output_default)
+    ).ask()
     output_path = Path(f"{output_str}.{output_extension}")
  
-    visualize = click.confirm(
-        "Generate visualization charts (timeline.png, contributors.png)?",
-        default=True,
-        prompt_suffix=" > "
-    )
+    visualize = questionary.confirm(
+        "Generate visualization charts (timeline.png, contributors.png)?"
+    ).ask()
     
     # Analyze repository
     console.print("[bold blue]Please be patient while the repository content is being examined.[/bold blue]")
