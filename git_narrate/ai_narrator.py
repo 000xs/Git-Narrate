@@ -59,10 +59,21 @@ class AINarrator:
             )
             response.raise_for_status() # Raise an exception for HTTP errors
             return response.json()["choices"][0]["message"]["content"]
-        except requests.exceptions.RequestException as e:
-            return f"Error generating AI story: {str(e)}"
+        except requests.exceptions.ConnectionError:
+            return "Error: Could not connect to the AI service. Please check your internet connection."
+        except requests.exceptions.Timeout:
+            return "Error: The request to the AI service timed out. Please try again later."
+        except requests.exceptions.HTTPError as e:
+            if e.response.status_code == 401:
+                return "Error: Invalid API key. Please check your OPENAI_API_KEY."
+            elif e.response.status_code == 429:
+                return "Error: API rate limit exceeded. Please wait and try again."
+            else:
+                return f"Error: An HTTP error occurred: {e.response.status_code} {e.response.reason}"
         except KeyError:
-            return "Error: Unexpected response format from AI API."
+            return "Error: Unexpected response format from AI API. The story could not be generated."
+        except Exception as e:
+            return f"An unexpected error occurred while generating the AI story: {str(e)}"
     
     def _generate_fallback_story(self) -> str:
         """Generate a fallback story when API key is not available."""

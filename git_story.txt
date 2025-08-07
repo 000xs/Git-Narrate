@@ -1,0 +1,20 @@
+
+# The Development Story of Git-Narrate
+
+## Introduction
+
+Git-Narrate was conceived as a solution to transform raw git repository data into coherent narratives that help developers understand their project's evolution. The project was born on August 6, 2025, with the first commit by Sithum Sathsara, who established the foundational architecture and vision for this innovative tool. From its inception, Git-Narrate aimed to address the common challenge of making sense of complex git histories by automating the creation of readable stories that document development journeys.
+
+## Development Phases
+
+The initial development phase focused on establishing the core functionality. On August 6, 2025, the project took its first significant step with the implementation of the "build add ai token" feature, which laid the groundwork for the AI-powered narration capabilities. The architecture was designed around several key modules: analyzer.py for parsing git data, narrator.py for story generation, ai_narrator.py for enhanced narratives through the Z.ai API, visualizer.py for creating charts and graphs, and cli.py for the command-line interface.
+
+Throughout this early stage, the project faced the challenge of effectively processing and presenting complex git history data. The solution involved leveraging GitPython to extract detailed information about commits, branches, tags, and contributors, then transforming this raw data into structured narratives that could be exported in multiple formats including Markdown, HTML, and plain text.
+
+## Contributors and Their Impact
+
+The primary driving force behind Git-Narrate has been Sithum Sathsara, who served as both the feature developer and project architect. With 14 contributions in a single day of development (August 6, 2025), Sathsara established the complete foundation of the project, implementing the core functionality and setting the direction for future development. Their work in designing the modular architecture and implementing the initial AI integration has been instrumental in creating a tool that bridges the gap between technical version control data and human-readable narratives.
+
+## Conclusion
+
+Git-Narrate represents a successful attempt to solve a common problem in software development: understanding and communicating the history of a project through its evolution. From its inception on August 6, 2025, to its current state as a functional tool with multiple output formats and visualization capabilities, the project has demonstrated the value of automated documentation. The collective effort, primarily driven by Sithum Sathsara's comprehensive initial implementation, has created a tool that not only serves its immediate purpose but also provides a foundation for future enhancements. As the project continues to develop, it stands as a testament to the power of transforming technical data into accessible narratives that help teams understand and communicate their development journey.

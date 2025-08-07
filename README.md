@@ -60,22 +60,7 @@ This will create two image files:
 *   `timeline.png`: A chart showing how many changes were made over time.
 *   `contributors.png`: A chart showing who made the most changes.
 
-## AI-Powered Storytelling (Now Default!)
-
-Git-Narrate now uses Artificial Intelligence by default to create detailed and engaging stories about your project's journey. To make this work, you'll need to set up an API key:
-
-1.  **Get an API Key:**
-    This feature uses the Z.ai platform. You'll need to get an API key from them.
-
-2.  **Set up your API Key:**
-    *   Create a file named `.env` in your project folder.
-    *   Inside this file, add the following line, replacing `"your_api_key_here"` with your actual key:
-        ```
-        OPENAI_API_KEY="your_api_key_here"
-        ```
-
-Now, Git-Narrate will automatically use AI to write a more creative story about your project's journey.
-
+ 
 ## For Developers: A Quick Look Under the Hood
 
 If you're a developer and want to contribute to Git-Narrate, here's a quick overview of how it works:

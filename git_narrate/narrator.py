@@ -29,54 +29,87 @@ class RepoNarrator:
         if output_format.lower() == "html":
             return f"""
             <!DOCTYPE html>
-            <html>
+            <html lang="en">
             <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>The Story of {self.repo_data['repo_name']}</title>
                 <style>
-                    body {{ font-family: Georgia, serif; line-height: 1.8; max-width: 800px; margin: 0 auto; padding: 40px; }}
-                    h1 {{ color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }}
-                    .story {{ text-align: justify; }}
+                    body {{ 
+                        font-family: Georgia, serif; 
+                        line-height: 1.8; 
+                        max-width: 800px; 
+                        margin: 0 auto; 
+                        padding: 20px; /* Adjusted padding for smaller screens */
+                        box-sizing: border-box; /* Include padding in element's total width and height */
+                    }}
+                    h1 {{ 
+                        color: #2c3e50; 
+                        border-bottom: 2px solid #3498db; 
+                        padding-bottom: 10px; 
+                        font-size: 2em; /* Responsive font size */
+                    }}
+                    .story {{ 
+                        text-align: justify; 
+                        word-wrap: break-word; /* Ensure long words break */
+                    }}
+
+                    /* Media queries for responsiveness */
+                    @media (max-width: 768px) {{
+                        body {{
+                            padding: 15px;
+                        }}
+                        h1 {{
+                            font-size: 1.8em;
+                        }}
+                    }}
+
+                    @media (max-width: 480px) {{
+                        body {{
+                            padding: 10px;
+                        }}
+                        h1 {{
+                            font-size: 1.5em;
+                        }}
+                    }}
                 </style>
             </head>
             <body>
                 <h1>The Story of {self.repo_data['repo_name']}</h1>
                 <div class="story">
-                    {story.replace('\n', '<br>')}
+                    {self._markdown_to_html(story)}
                 </div>
             </body>
             </html>
             """
-        elif output_format.lower() == "text":
-            return f"THE STORY OF {self.repo_data['repo_name'].upper()}\n\n{story}"
-        else:
-            return f"# The Story of {self.repo_data['repo_name']}\n\n{story}"
-    
+        return story
+
     def _detect_milestones(self) -> List[Dict[str, Any]]:
-        """Identify key milestones in repository history."""
+        """Detect key milestones from commit history."""
         milestones = []
         
         # Initial commit
         if self.repo_data["commits"]:
-            first_commit = min(self.repo_data["commits"], key=lambda c: c["date"])
+            initial_commit = self.repo_data["commits"][-1]
             milestones.append({
                 "type": "initial",
-                "date": first_commit["date"],
+                "date": initial_commit["date"],
                 "description": "Project inception",
-                "commit": first_commit["sha"],
-                "author": first_commit["author"]
+                "commit": initial_commit["sha"],
+                "author": initial_commit["author"]
             })
         
-        # Tags/releases
+        # Releases (tags)
         for tag in self.repo_data["tags"]:
-            if tag["date"]:
-                milestones.append({
-                    "type": "release",
-                    "date": tag["date"],
-                    "description": f"Release {tag['name']}",
-                    "commit": tag["commit"]
-                })
-        
-        # Major merges (simplified detection)
+            milestones.append({
+                "type": "release",
+                "date": tag["date"],
+                "description": f"Release: {tag['name']}",
+                "commit": tag["commit_sha"],
+                "author": tag["committer"]
+            })
+            
+        # Major merges
         for commit in self.repo_data["commits"]:
             if commit["is_merge"] and "merge" in commit["message"].lower():
                 milestones.append({
@@ -206,9 +239,56 @@ class RepoNarrator:
     
     def _markdown_to_html(self, md_text: str) -> str:
         """Simplified Markdown to HTML conversion."""
-        html = md_text.replace("\n\n", "</p><p>")
-        html = html.replace("\n", "<br>")
-        html = f"<p>{html}</p>"
+        # Split the markdown text into lines
+        lines = md_text.split('\n')
+        html_lines = []
+        in_paragraph = False
+        in_list = False
+
+        for line in lines:
+            stripped_line = line.strip()
+            
+            if stripped_line.startswith('#'): # Handle headers
+                if in_paragraph:
+                    html_lines.append("</p>")
+                    in_paragraph = False
+                if in_list:
+                    html_lines.append("</ul>")
+                    in_list = False
+                level = stripped_line.count('#')
+                html_lines.append(f"<h{level}>{stripped_line.lstrip('# ').strip()}</h{level}>")
+            elif stripped_line.startswith('* ') or stripped_line.startswith('- '): # Handle lists
+                if in_paragraph:
+                    html_lines.append("</p>")
+                    in_paragraph = False
+                if not in_list:
+                    html_lines.append("<ul>")
+                    in_list = True
+                html_lines.append(f"<li>{stripped_line[2:].strip()}</li>")
+            elif stripped_line: # Handle paragraphs
+                if in_list:
+                    html_lines.append("</ul>")
+                    in_list = False
+                if not in_paragraph:
+                    html_lines.append("<p>")
+                    in_paragraph = True
+                html_lines.append(line.replace('\n', '<br>') if line.strip() else '')
+            else: # Handle empty lines, which signify paragraph breaks
+                if in_paragraph:
+                    html_lines.append("</p>")
+                    in_paragraph = False
+                if in_list:
+                    html_lines.append("</ul>")
+                    in_list = False
+        
+        # Close any open tags at the end
+        if in_paragraph:
+            html_lines.append("</p>")
+        if in_list:
+            html_lines.append("</ul>")
+
+        # Join all processed lines into a single HTML string
+        html = "\n".join(html_lines)
         return html
     
     def _is_significant(self, commit: Dict[str, Any]) -> bool:
