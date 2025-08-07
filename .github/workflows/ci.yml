@@ -32,5 +32,5 @@ jobs:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }} # Pass API key for AI-related tests
       run: |
         python -m pip install dist/*.whl
-        python -m git_narrate -h
+        git-narrate -h
         rm -r dist
