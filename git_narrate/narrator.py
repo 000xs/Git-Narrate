@@ -8,7 +8,6 @@ from dotenv import load_dotenv
 class RepoNarrator:
     def __init__(self, repo_data: Dict[str, Any]):
         self.repo_data = repo_data
-        
         load_dotenv()
         self.api_key = os.getenv("OPENAI_API_KEY")
         if not self.api_key or self.api_key.strip() == "":
@@ -60,7 +59,7 @@ class RepoNarrator:
         commits_json = self._get_limited_json(chapter["commits"])
 
         prompt = f"""
-You are a technical writer. Your task is to write a short, thematic summary of the following list of git commits. This is one chapter in a larger story. Focus on the main events and the overall theme of this period.
+You are a professional software engineering storyteller. Your task is to write a concise, thematic summary of the following list of git commits, focusing on key development milestones and technical progress. This summary will serve as a chapter in a larger, friendly, and professional narrative about the project's evolution.
 
 Chapter Title: {chapter['title']}
 Commit Data:
@@ -68,7 +67,7 @@ Commit Data:
 {commits_json}
 ```
 
-Based on the data, write a concise summary of this chapter in the project's history.
+Based on the provided commit data, craft a professional and developer-friendly summary of this chapter in the project's history.
 """
         return self._call_ai(prompt, 500)
 
@@ -78,14 +77,14 @@ Based on the data, write a concise summary of this chapter in the project's hist
         full_summary = "\n\n".join(chapter_summaries)
 
         prompt = f"""
-You are a master storyteller. I have a series of chapter summaries from a project's history. Your task is to weave them into a single, cohesive, and engaging narrative. Smooth out the transitions between chapters and give the story a consistent, compelling voice.
+You are a master storyteller and a seasoned software engineer. I have a series of chapter summaries detailing a project's development history. Your task is to weave these summaries into a single, cohesive, engaging, and professional narrative. Ensure smooth transitions between chapters and maintain a consistent, developer-friendly voice throughout the story.
 
 Here are the chapter summaries:
 ---
 {full_summary}
 ---
 
-Now, write the final, complete story of the project.
+Now, write the final, complete, and professional narrative of the project's journey.
 """
         return self._call_ai(prompt, 3000)
 
