@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 class RepoNarrator:
     def __init__(self, repo_data: Dict[str, Any]):
         self.repo_data = repo_data
+        
         load_dotenv()
         self.api_key = os.getenv("OPENAI_API_KEY")
         if not self.api_key or self.api_key.strip() == "":

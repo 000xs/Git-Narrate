@@ -7,7 +7,7 @@ long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="git-narrate",
-    version="1.0.3",
+    version="1.0.4",
     description="The Repository Storyteller - Analyze git repos and generate development narratives",
     long_description=long_description,
     long_description_content_type="text/markdown",
